@@ -1,6 +1,7 @@
 #include <alpm.h>
 #undef DEPRECATED /* Ruby uses its own DEPRECATED macro. */
 #include "ruby.h"
+
 #include "ruby-alpm.h"
 #include "enum-symbols.h"
 
@@ -61,6 +62,8 @@ Init_alpm ()
     rb_define_method( eAlpmError, "errno",      err_errno,      0  );
 
     define_enum_symbols();
+
+    Init_options();
 }
 
 #undef FUNC

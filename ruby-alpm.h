@@ -8,6 +8,11 @@ extern VALUE eAlpmError;
     do { if ( FUNCCALL == -1 )                                          \
             rb_raise( eAlpmError, "%s", alpm_strerrorlast()); } while (0)
 
-void Init_alpmerror ( void );
+/* Datatype conversion functions (see datatypes.c) */
+alpm_list_t * ary_to_alpmstrlist ( VALUE ary );
+VALUE alpmstrlist_to_ary ( alpm_list_t * t );
+
+/* Adds option functions to Alpm module */
+void Init_options ( void );
 
 #endif
