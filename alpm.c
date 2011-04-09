@@ -2,6 +2,7 @@
 #undef DEPRECATED /* Ruby uses its own DEPRECATED macro. */
 #include "ruby.h"
 #include "ruby-alpm.h"
+#include "enum-symbols.h"
 
 VALUE mAlpm, eAlpmError;
 
@@ -9,8 +10,7 @@ static VALUE
 err_initialize ( int argc, VALUE * argv, VALUE self )
 {
     /* pm_errno is an exported variable from libalpm. */
-    VALUE errno = INT2FIX( pm_errno );
-    rb_iv_set( self, "@errno", errno );
+    rb_iv_set( self, "@errno", PMERRNO_SYM( pm_errno ));
     rb_call_super( argc, argv ); /* stores string arguments */
 
     return self;
@@ -59,6 +59,8 @@ Init_alpm ()
     eAlpmError = rb_define_class( "AlpmError", rb_eRuntimeError );
     rb_define_method( eAlpmError, "initialize", err_initialize, -1 );
     rb_define_method( eAlpmError, "errno",      err_errno,      0  );
+
+    define_enum_symbols();
 }
 
 #undef FUNC

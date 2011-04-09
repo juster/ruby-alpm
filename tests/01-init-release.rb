@@ -12,7 +12,7 @@ class InitRelease < Test::Unit::TestCase
       Alpm.release
       assert false, 'Calling release twice should have thrown an error'
     rescue AlpmError => pmerr
-      assert_equal pmerr.to_s, 'library not initialized'
+      assert_equal :handlenull, pmerr.errno
     ensure
       Alpm.init # re-initialize it for other tests
     end
@@ -23,7 +23,7 @@ class InitRelease < Test::Unit::TestCase
       Alpm.init
       assert false, 'Calling an extra init should have thrown an error'
     rescue AlpmError => pmerr
-      assert_equal pmerr.to_s, 'library already initialized'
+      assert_equal :handlenotnull, pmerr.errno
     end
   end
 
