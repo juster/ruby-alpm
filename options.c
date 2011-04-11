@@ -22,9 +22,8 @@
     DEF_OPT( NAME, string_or_nil, StringValueCStr )
 #define DEF_STRLISTOPT( NAME ) \
     DEF_OPT( NAME, alpmstrlist_to_ary, ary_to_alpmstrlist )
-#define bool_of_int( INT ) ( (INT) ? Qtrue : Qfalse )
 #define DEF_BOOLOPT( NAME ) \
-    DEF_OPT( NAME, /*empty*/, bool_of_int )
+    DEF_OPT( NAME, /*empty*/, INT2BOOL )
 
 DEF_STROPT( root )
 DEF_STROPT( dbpath )
@@ -47,7 +46,6 @@ DEF_BOOLOPT( checkspace )
 #undef DEF_STRLISTOPT
 #undef DEF_BOOLOPT
 #undef string_or_nil
-#undef bool_of_int
 
 #define OPTFUNC( NAME )                                               \
     rb_define_module_function( mAlpm, #NAME, opt_get_##NAME, 0 );     \

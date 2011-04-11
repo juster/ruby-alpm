@@ -5,13 +5,7 @@
 #include "ruby-alpm.h"
 #include "enum-symbols.h"
 
-#define ACC( FUNC, MAPPER )                             \
-    static VALUE dep_ ## FUNC ( VALUE self )            \
-    {                                                   \
-        pmdepend_t * dep;                               \
-        Data_Get_Struct( self, pmdepend_t, dep );       \
-        return MAPPER( alpm_dep_ ## FUNC( dep ));       \
-    }
+#define ACC( FUNC, MAPPER ) ACCESSOR( dep, pmdepend_t, FUNC, MAPPER )
 
 ACC( get_mod, DEPMOD_SYM )
 ACC( get_name, rb_str_new2 )
