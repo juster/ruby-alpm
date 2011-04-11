@@ -105,6 +105,7 @@ define_enum_symbols ()
 #undef ERR
 
 #define MOD( NAME ) SYM( depmod_symbols, NAME )
+    idx = 0;
     MOD( "any" );
     MOD( "eq" );
     MOD( "ge" );
@@ -112,6 +113,12 @@ define_enum_symbols ()
     MOD( "gt" );
     MOD( "lt" );
 #undef MOD
+
+#define REASON( NAME ) SYM( pkgreason_symbols, NAME )
+    idx = 0;
+    REASON( "explicit" );
+    REASON( "depend" );
+#undef REASON
 
 #undef SYM
 
