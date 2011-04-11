@@ -3,22 +3,25 @@
 #undef DEPRECATED
 #include "ruby.h"
 
-#define DEF_LIST2ARY( FUNCNAME, MAPPER, TYPE )                       \
-    VALUE                                                            \
-    FUNCNAME ( alpm_list_t * list )                                  \
-    {                                                                \
-    VALUE ary;                                                       \
-                                                                     \
-    ary = rb_ary_new();                                              \
-    while ( list != NULL ) {                                         \
-    rb_ary_push( ary, MAPPER( TYPE alpm_list_getdata( list )));     \
-    list = alpm_list_next( list );                                   \
-    }                                                                \
-                                                                     \
-    return ary;                                                      \
-}
+#include "ruby-alpm.h"
 
-DEF_LIST2ARY( alpmstrlist_to_ary, rb_str_new2, (char *))
+#define DEF_LIST2ARY( FUNCNAME, MAPPER, TYPE )                          \
+    VALUE                                                               \
+    FUNCNAME ( alpm_list_t * list )                                     \
+    {                                                                   \
+        VALUE ary;                                                      \
+                                                                        \
+        ary = rb_ary_new();                                             \
+        while ( list != NULL ) {                                        \
+            rb_ary_push( ary, MAPPER( TYPE alpm_list_getdata( list ))); \
+            list = alpm_list_next( list );                              \
+        }                                                               \
+                                                                        \
+        return ary;                                                     \
+    }
+
+DEF_LIST2ARY( alpmstrlist_to_ary, rb_str_new2, (char *)       )
+DEF_LIST2ARY( alpmdeplist_to_ary, DEP2OBJ,     (pmdepend_t *) )
 
 #undef DEF_LIST2ARY
 

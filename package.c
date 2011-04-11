@@ -41,6 +41,7 @@ INTACC( isize )
 STRLISTACC( licenses )
 STRLISTACC( groups )
 
+ACC( get_depends, alpmdeplist_to_ary )
 STRLISTACC( optdepends )
 STRLISTACC( conflicts )
 STRLISTACC( provides )
