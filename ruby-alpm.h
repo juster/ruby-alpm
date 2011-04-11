@@ -4,8 +4,9 @@
 extern VALUE mAlpm, eAlpmError, cDep, cPackage;
 
 #define NEGISERR( FUNCCALL )                                            \
-    do { if ( FUNCCALL == -1 )                                          \
-            rb_raise( eAlpmError, "%s", alpm_strerrorlast()); } while (0)
+    if ( FUNCCALL == -1 )                                               \
+        rb_raise( eAlpmError, "%s", alpm_strerrorlast());               \
+    return Qnil
 
 #define ACCESSOR( PREFIX, TYPE, FUNC, MAPPER )                       \
     static VALUE PREFIX##_##FUNC ( VALUE self )                      \

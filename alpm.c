@@ -27,14 +27,12 @@ static VALUE
 ralpm_init ()
 {
     NEGISERR( alpm_initialize() );
-    return Qnil;
 }
 
 static VALUE
 ralpm_release ()
 {
     NEGISERR( alpm_release() );
-    return Qnil;
 }
 
 static VALUE
