@@ -104,6 +104,17 @@ define_enum_symbols ()
     ERR( "external_download" );
 #undef ERR
 
+#define MOD( NAME ) SYM( depmod_symbols, NAME )
+    MOD( "any" );
+    MOD( "eq" );
+    MOD( "ge" );
+    MOD( "le" );
+    MOD( "gt" );
+    MOD( "lt" );
+#undef MOD
+
+#undef SYM
+
     loglevel_symbols  = alloc_bitflag_table( PM_LOG_FUNCTION );
     transflag_symbols = alloc_bitflag_table( PM_TRANS_FLAG_NOLOCK );
     transconv_symbols = alloc_bitflag_table( PM_TRANS_CONV_SELECT_PROVIDER );
