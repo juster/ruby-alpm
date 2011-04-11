@@ -5,7 +5,7 @@
 #include "ruby-alpm.h"
 #include "enum-symbols.h"
 
-VALUE mAlpm, eAlpmError;
+VALUE mAlpm, eAlpmError, cDep;
 
 static VALUE
 err_initialize ( int argc, VALUE * argv, VALUE self )
@@ -64,6 +64,7 @@ Init_alpm ()
     define_enum_symbols();
 
     Init_options();
+    Init_dep();
 }
 
 #undef FUNC
