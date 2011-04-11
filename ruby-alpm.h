@@ -1,8 +1,7 @@
 #ifndef RUBYALPM_H
 #define RUBYALPM_H
 
-extern VALUE mAlpm, cDep;
-extern VALUE eAlpmError;
+extern VALUE mAlpm, eAlpmError, cDep, cPackage;
 
 #define NEGISERR( FUNCCALL )                                            \
     do { if ( FUNCCALL == -1 )                                          \
@@ -24,6 +23,7 @@ VALUE alpmstrlist_to_ary ( alpm_list_t * t );
 
 /* Adds option functions to Alpm module */
 void Init_options ( void );
-void Init_dep ( void );
+void Init_dep     ( void );
+void Init_package ( void );
 
 #endif
