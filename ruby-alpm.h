@@ -34,7 +34,7 @@ VALUE alpmstrlist_to_ary ( alpm_list_t * t );
 void ruby_alpm_cb_log      ( pmloglevel_t, const char *, va_list );
 void ruby_alpm_cb_download ( const char *, off_t, off_t );
 int  ruby_alpm_cb_fetch    ( const char *, const char *, int );
-
+void ruby_alpm_cb_totaldl  ( off_t );
 
 void Init_options  ( void );
 void Init_dep      ( void );

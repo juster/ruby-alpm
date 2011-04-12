@@ -54,3 +54,13 @@ ruby_alpm_cb_fetch ( const char * url, const char * localpath, int force )
     /* The callback should return 0 for success or 1 for file exists. */
     return NUM2INT( intret );
 }
+
+void
+ruby_alpm_cb_totaldl ( off_t total )
+{
+    if ( ! totaldlcb_proc ) { return; }
+
+    VALUE rbtotal = INT2NUM( total );
+    rb_proc_call( totaldlcb_proc, rbtotal );
+    return;
+}
