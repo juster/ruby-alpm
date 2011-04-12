@@ -50,11 +50,13 @@ DEF_BOOLOPT( checkspace )
 /* Callbacks. The use of blocks was copied from Kernel.at_exit(). */
 
 #define DEF_CBOPT( NAME, FUNC, VAR )                            \
-    static VALUE opt_set_##NAME ( void )                          \
+    static VALUE opt_set_##NAME ( void )                        \
     {                                                           \
         VALUE cbproc;                                           \
         if ( ! rb_block_given_p() ) {                           \
-            rb_raise( rb_eArgError, "called without a block" ); \
+            alpm_option_set##NAME( NULL );                      \
+            VAR = Qfalse;                                       \
+            return Qnil;                                        \
         }                                                       \
                                                                 \
         VAR = rb_block_proc();                                  \
