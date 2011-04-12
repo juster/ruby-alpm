@@ -52,15 +52,18 @@ DEF_BOOLOPT( checkspace )
 #define DEF_CBOPT( NAME, FUNC, VAR )                            \
     static VALUE opt_set_##NAME ( void )                        \
     {                                                           \
-        VALUE cbproc;                                           \
         if ( ! rb_block_given_p() ) {                           \
+            if ( VAR ) {                                        \
+                rb_gc_unregister_address( &VAR );               \
+            }                                                   \
             alpm_option_set##NAME( NULL );                      \
             VAR = Qfalse;                                       \
-            return Qnil;                                        \
         }                                                       \
-                                                                \
-        VAR = rb_block_proc();                                  \
-        alpm_option_set_##NAME( FUNC );                         \
+        else {                                                  \
+            VAR = rb_block_proc();                              \
+            rb_gc_register_address( &VAR );                     \
+            alpm_option_set_##NAME( FUNC );                     \
+        }                                                       \
         return Qnil;                                            \
     }
 
