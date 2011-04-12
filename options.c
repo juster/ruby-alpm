@@ -64,7 +64,8 @@ DEF_BOOLOPT( checkspace )
         return Qnil;                                            \
     }
 
-DEF_CBOPT( logcb, ruby_alpm_cb_log, logcb_proc )
+DEF_CBOPT( logcb, ruby_alpm_cb_log,      logcb_proc )
+DEF_CBOPT( dlcb,  ruby_alpm_cb_download, dlcb_proc  )
 
 void
 Init_options ()
@@ -87,6 +88,11 @@ Init_options ()
     OPTFUNC( checkspace );
 #undef OPTFUNC
 
-    rb_define_module_function( mAlpm, "logcb", opt_set_logcb, 0 );
+#define CBFUNC( NAME ) \
+    rb_define_module_function( mAlpm, #NAME, opt_set_##NAME, 0 )
+
+    CBFUNC( logcb );
+    CBFUNC( dlcb );
+#undef CBFUNC
 }
 
