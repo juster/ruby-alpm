@@ -41,7 +41,7 @@ INTACC( isize )
 STRLISTACC( licenses )
 STRLISTACC( groups )
 
-ACC( get_depends, alpmdeplist_to_ary )
+ACC( depends, alpmdeplist_to_ary )
 STRLISTACC( optdepends )
 STRLISTACC( conflicts )
 STRLISTACC( provides )
@@ -81,6 +81,7 @@ Init_package( void )
     METH( isize );
     METH( licenses );
     METH( groups );
+    METH( depends );
     METH( optdepends );
     METH( conflicts );
     METH( provides );
