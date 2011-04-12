@@ -44,7 +44,7 @@ ruby_alpm_cb_fetch ( const char * url, const char * localpath, int force )
     int error_occurred = 0;
     VALUE rburl   = rb_str_new2( url );
     VALUE rbpath  = rb_str_new2( localpath );
-    VALUE rbforce = INT2NUM( force );
+    VALUE rbforce = INT2BOOL( force );
     VALUE intret;
     intret = rb_protect( fetch_proc_call,
                          rb_ary_new3( rburl, rbpath, rbforce ),
