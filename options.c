@@ -71,6 +71,8 @@ DEF_CBOPT( logcb,   ruby_alpm_cb_log,      logcb_proc   )
 DEF_CBOPT( dlcb,    ruby_alpm_cb_download, dlcb_proc    )
 DEF_CBOPT( fetchcb, ruby_alpm_cb_fetch,    fetchcb_proc )
 
+#undef DEF_CBOPT
+
 void
 Init_options ()
 {
