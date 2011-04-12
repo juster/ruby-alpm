@@ -6,6 +6,7 @@
 #include "enum-symbols.h"
 
 VALUE mAlpm, eAlpmError, cDep, cPackage, cDatabase, cLocalDB, cSyncDB;
+VALUE logcb_proc, dlcb_proc, fetchcb_proc, totaldlcb_proc;
 
 static VALUE
 err_initialize ( int argc, VALUE * argv, VALUE self )
@@ -60,6 +61,11 @@ ralpm_syncdbs ()
 void
 Init_alpm ()
 {
+    logcb_proc     = Qnil;
+    dlcb_proc      = Qnil;
+    fetchcb_proc   = Qnil;
+    totaldlcb_proc = Qnil;
+    
     alpm_initialize();
 
     mAlpm = rb_define_module( "Alpm" );

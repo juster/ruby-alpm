@@ -4,6 +4,8 @@
 extern VALUE mAlpm, eAlpmError, cDep, cPackage,
     cDatabase, cLocalDB, cSyncDB;
 
+extern VALUE logcb_proc, dlcb_proc, fetchcb_proc, totaldlcb_proc;
+
 #define NEGISERR( FUNCCALL )                                            \
     if ( FUNCCALL == -1 )                                               \
         rb_raise( eAlpmError, "%s", alpm_strerrorlast());               \
@@ -28,7 +30,9 @@ extern VALUE mAlpm, eAlpmError, cDep, cPackage,
 alpm_list_t * ary_to_alpmstrlist ( VALUE ary );
 VALUE alpmstrlist_to_ary ( alpm_list_t * t );
 
-/* Adds option functions to Alpm module */
+/* Callbacks. */
+void ruby_alpm_cb_log ( pmloglevel_t, const char *, va_list );
+
 void Init_options  ( void );
 void Init_dep      ( void );
 void Init_package  ( void );

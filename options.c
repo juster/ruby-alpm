@@ -47,13 +47,30 @@ DEF_BOOLOPT( checkspace )
 #undef DEF_BOOLOPT
 #undef string_or_nil
 
-#define OPTFUNC( NAME )                                               \
-    rb_define_module_function( mAlpm, #NAME, opt_get_##NAME, 0 );     \
-    rb_define_module_function( mAlpm, #NAME"=", opt_set_##NAME, 1 )
+/* Callbacks. The use of blocks was copied from Kernel.at_exit(). */
+
+#define DEF_CBOPT( NAME, FUNC, VAR )                            \
+    static VALUE opt_set_##NAME ( void )                          \
+    {                                                           \
+        VALUE cbproc;                                           \
+        if ( ! rb_block_given_p() ) {                           \
+            rb_raise( rb_eArgError, "called without a block" ); \
+        }                                                       \
+                                                                \
+        VAR = rb_block_proc();                                  \
+        alpm_option_set_##NAME( FUNC );                         \
+        return Qnil;                                            \
+    }
+
+DEF_CBOPT( logcb, ruby_alpm_cb_log, logcb_proc )
 
 void
 Init_options ()
 {
+#define OPTFUNC( NAME )                                               \
+    rb_define_module_function( mAlpm, #NAME, opt_get_##NAME, 0 );     \
+    rb_define_module_function( mAlpm, #NAME"=", opt_set_##NAME, 1 )
+
     OPTFUNC( root );
     OPTFUNC( dbpath );
     OPTFUNC( cachedirs );
@@ -66,6 +83,8 @@ Init_options ()
     OPTFUNC( arch );
     OPTFUNC( usedelta );
     OPTFUNC( checkspace );
+#undef OPTFUNC
+
+    rb_define_module_function( mAlpm, "logcb", opt_set_logcb, 0 );
 }
 
-#undef OPTFUNC
