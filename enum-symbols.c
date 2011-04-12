@@ -40,6 +40,11 @@ void
 define_enum_symbols ()
 {
     int idx;
+
+    loglevel_symbols  = alloc_bitflag_table( PM_LOG_FUNCTION );
+    transflag_symbols = alloc_bitflag_table( PM_TRANS_FLAG_NOLOCK );
+    transconv_symbols = alloc_bitflag_table( PM_TRANS_CONV_SELECT_PROVIDER );
+
 #define SYM( TBL, NAME ) TBL[ idx++ ] = rb_intern( NAME )
     /* We must be sure to add symbols in the same order as the enum. */
 
@@ -120,11 +125,15 @@ define_enum_symbols ()
     REASON( "depend" );
 #undef REASON
 
-#undef SYM
+#define LOGLEVEL( NAME ) SYM( loglevel_symbols, NAME )
+    idx = 0;
+    LOGLEVEL( "error"    );
+    LOGLEVEL( "warning"  );
+    LOGLEVEL( "debug"    );
+    LOGLEVEL( "function" );
+#undef LOGLEVEL
 
-    loglevel_symbols  = alloc_bitflag_table( PM_LOG_FUNCTION );
-    transflag_symbols = alloc_bitflag_table( PM_TRANS_FLAG_NOLOCK );
-    transconv_symbols = alloc_bitflag_table( PM_TRANS_CONV_SELECT_PROVIDER );
+#undef SYM
 
     return;
 }
