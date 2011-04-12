@@ -23,6 +23,8 @@
 DEF_LIST2ARY( alpmstrlist_to_ary, rb_str_new2, (char *)       )
 DEF_LIST2ARY( alpmdeplist_to_ary, DEP2OBJ,     (pmdepend_t *) )
 DEF_LIST2ARY( alpmpkglist_to_ary, PKG2OBJ,     (pmpkg_t *)    )
+DEF_LIST2ARY( alpmdblist_to_ary,  SDB2OBJ,     (pmdb_t *)     )
+/* the only database list is for  ^^^ sync databases */
 
 #undef DEF_LIST2ARY
 

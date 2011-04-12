@@ -1,7 +1,8 @@
 #ifndef RUBYALPM_H
 #define RUBYALPM_H
 
-extern VALUE mAlpm, eAlpmError, cDep, cPackage, cDatabase;
+extern VALUE mAlpm, eAlpmError, cDep, cPackage,
+    cDatabase, cLocalDB, cSyncDB;
 
 #define NEGISERR( FUNCCALL )                                            \
     if ( FUNCCALL == -1 )                                               \
@@ -20,7 +21,8 @@ extern VALUE mAlpm, eAlpmError, cDep, cPackage, cDatabase;
 
 #define PKG2OBJ( PTR ) Data_Wrap_Struct( cPackage, NULL, NULL, PTR )
 #define DEP2OBJ( PTR ) Data_Wrap_Struct( cDep, NULL, NULL, PTR )
-#define DB2OBJ( PTR )  Data_Wrap_Struct( cDatabase, NULL, NULL, PTR )
+#define LDB2OBJ( PTR ) Data_Wrap_Struct( cLocalDB, NULL, NULL, PTR )
+#define SDB2OBJ( PTR ) Data_Wrap_Struct( cSyncDB, NULL, NULL, PTR )
 
 /* Datatype conversion functions (see datatypes.c) */
 alpm_list_t * ary_to_alpmstrlist ( VALUE ary );

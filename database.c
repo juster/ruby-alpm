@@ -47,17 +47,20 @@ db_pkgs ( VALUE self )
 
 void Init_database ( void )
 {
-    cDatabase = rb_define_class_under( mAlpm, "Database", rb_cObject );
+    cDatabase = rb_define_class_under( mAlpm, "DB", rb_cObject );
     
-#define METH( NAME, FUNC ) rb_define_method( cDatabase, NAME, db_##FUNC, 0 )
-    METH( "name", get_name );
-    METH( "url", get_url );
-#undef METH
+    rb_define_method( cDatabase, "name", db_get_name, 0 );
 #define METH( FUNC, C ) rb_define_method( cDatabase, #FUNC, db_##FUNC, C )
-    METH( update, 1 );
     METH( find,   1 );
     METH( pkgs,   0 );
 #undef METH
+
+    cLocalDB = rb_define_class_under( cDatabase, "Local", cDatabase );
+    
+    cSyncDB = rb_define_class_under( cDatabase, "Sync", cDatabase );
+    rb_define_method( cSyncDB, "update",  db_update,  0 );
+    rb_define_method( cSyncDB, "url",     db_get_url, 0 );
+    rb_define_method( cSyncDB, "add_url", db_add_url, 1 );
 
     return;
 }

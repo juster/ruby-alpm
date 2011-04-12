@@ -5,7 +5,7 @@
 #include "ruby-alpm.h"
 #include "enum-symbols.h"
 
-VALUE mAlpm, eAlpmError, cDep, cPackage, cDatabase;
+VALUE mAlpm, eAlpmError, cDep, cPackage, cDatabase, cLocalDB, cSyncDB;
 
 static VALUE
 err_initialize ( int argc, VALUE * argv, VALUE self )
@@ -41,6 +41,18 @@ ralpm_version ()
     return rb_str_new2( alpm_version() );
 }
 
+static VALUE
+ralpm_localdb ()
+{
+    return LDB2OBJ( alpm_option_get_localdb() );
+}
+
+static VALUE
+ralpm_syncdbs ()
+{
+    return alpmdblist_to_ary( alpm_option_get_syncdbs() );
+}
+
 #define FUNC( NAME, ARGCOUNT ) \
     rb_define_module_function( mAlpm, #NAME, ralpm_ ## NAME, ARGCOUNT )
 #define FUNC0( NAME ) FUNC( NAME, 0 )
@@ -54,6 +66,8 @@ Init_alpm ()
     FUNC0( init );
     FUNC0( release );
     FUNC0( version );
+    FUNC0( localdb );
+    FUNC0( syncdbs );
 
     eAlpmError = rb_define_class( "AlpmError", rb_eRuntimeError );
     rb_define_method( eAlpmError, "initialize", err_initialize, -1 );
