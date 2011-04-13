@@ -20,6 +20,8 @@ extern VALUE logcb_proc, dlcb_proc, fetchcb_proc, totaldlcb_proc;
     }
 
 #define INT2BOOL(INT) ( (INT) ? Qtrue : Qfalse )
+#define GRP2ARY( GRP ) alpmpkglist_to_ary( alpm_grp_get_pkgs( GRP ))
+#define GRPNAME( GRP ) alpm_grp_get_name( GRP )
 
 #define PKG2OBJ( PTR ) Data_Wrap_Struct( cPackage, NULL, NULL, PTR )
 #define DEP2OBJ( PTR ) Data_Wrap_Struct( cDep, NULL, NULL, PTR )

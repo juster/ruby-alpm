@@ -16,7 +16,7 @@ new_timeobj ( time_t pkgtime )
 }
 
 #define ACC( FUNC, MAPPER ) ACCESSOR( pkg, pmpkg_t, get_ ## FUNC, MAPPER )
-#define STRACC( FUNC )      ACC( FUNC, rv_str_new2 )
+#define STRACC( FUNC )      ACC( FUNC, rb_str_new2 )
 #define STRLISTACC( FUNC )  ACC( FUNC, alpmstrlist_to_ary )
 #define TIMEACC( FUNC )     ACC( FUNC, newtimeobj )
 #define BOOLACC( FUNC )     ACC( FUNC, INT2BOOL )
@@ -66,7 +66,7 @@ Init_package( void )
 {
     cPackage = rb_define_class_under( mAlpm, "Package", rb_cObject );
 
-#define METH( NAME ) rb_define_method( cPackage, #NAME, pkg_get_##NAME, 1 )
+#define METH( NAME ) rb_define_method( cPackage, #NAME, pkg_get_##NAME, 0 )
     METH( filename );
     METH( name );
     METH( version );

@@ -45,6 +45,33 @@ db_pkgs ( VALUE self )
     return alpmpkglist_to_ary( alpm_db_get_pkgcache( db ));
 }
 
+VALUE
+db_find_group ( VALUE self, VALUE grpname )
+{
+    INITDBPTR;
+    return GRP2ARY( alpm_db_readgrp( db, StringValueCStr( grpname )));
+}
+
+VALUE
+db_groups ( VALUE self )
+{
+    alpm_list_t * iter;
+
+    INITDBPTR;
+    VALUE grphash = rb_hash_new();
+    
+    iter = alpm_db_get_grpcache( db );
+    while ( iter != NULL ) {
+        pmgrp_t * grp = alpm_list_getdata( iter );
+        VALUE grpname = rb_str_new2( alpm_grp_get_name( grp ));
+        VALUE pkgs    = alpmpkglist_to_ary( alpm_grp_get_pkgs( grp ));
+        rb_hash_aset( grphash, grpname, pkgs );
+        iter = alpm_list_next( iter );
+    }
+
+    return grphash;
+}
+
 void Init_database ( void )
 {
     cDatabase = rb_define_class_under( mAlpm, "DB", rb_cObject );
@@ -53,6 +80,8 @@ void Init_database ( void )
 #define METH( FUNC, C ) rb_define_method( cDatabase, #FUNC, db_##FUNC, C )
     METH( find,   1 );
     METH( pkgs,   0 );
+    METH( find_group, 1 );
+    METH( groups,     0 );
 #undef METH
 
     cLocalDB = rb_define_class_under( cDatabase, "Local", cDatabase );
