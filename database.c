@@ -23,6 +23,13 @@ db_add_url ( VALUE self, VALUE url )
 }
 
 VALUE
+db_unregister ( VALUE self )
+{
+    INITDBPTR;
+    NEGISERR( alpm_db_unregister( db ));
+}
+
+VALUE
 db_update ( VALUE self, VALUE force )
 {
     INITDBPTR;
@@ -74,22 +81,44 @@ db_groups ( VALUE self )
 
 void Init_database ( void )
 {
-    cDatabase = rb_define_class_under( mAlpm, "DB", rb_cObject );
+    cDatabase = rb_define_class_under( mAlpm,     "DB",    rb_cObject );
+    cLocalDB  = rb_define_class_under( cDatabase, "Local", cDatabase  );
+    cSyncDB   = rb_define_class_under( cDatabase, "Sync",  cDatabase  );
+
+#define CLASSMETH( CLASS, METH, C ) \
+    rb_define_method( CLASS, #METH, db_##METH, C )
+
+    /* Methods for both local and sync databases. */
     
-    rb_define_method( cDatabase, "name", db_get_name, 0 );
-#define METH( FUNC, C ) rb_define_method( cDatabase, #FUNC, db_##FUNC, C )
-    METH( find,   1 );
-    METH( pkgs,   0 );
-    METH( find_group, 1 );
-    METH( groups,     0 );
+#define METH( METH, C ) CLASSMETH( cDatabase, METH, C )
+#define METH0( METH ) METH( METH, 0 )
+#define METH1( METH ) METH( METH, 1 )
+#define METH2( METH ) METH( METH, 2 )
+    METH0( name );
+    METH1( find );
+    METH0( pkgs );
+    METH1( find_group );
+    METH0( groups     );
+    METH0( unregister );
 #undef METH
 
-    cLocalDB = rb_define_class_under( cDatabase, "Local", cDatabase );
-    
-    cSyncDB = rb_define_class_under( cDatabase, "Sync", cDatabase );
-    rb_define_method( cSyncDB, "update",  db_update,  0 );
-    rb_define_method( cSyncDB, "url",     db_get_url, 0 );
-    rb_define_method( cSyncDB, "add_url", db_add_url, 1 );
+    /* Local database methods. */
+
+#define METH( METH, C ) CLASSMETH( cLocalDB, METH, C )
+#undef METH
+
+    /* Sync database methods. */
+
+#define METH( FUNC, C ) rb_define_method( cSyncDB, #FUNC, db_##FUNC, C )
+    METH0( update  );
+    METH0( url     );
+    METH1( add_url );
+#undef METH
+
+#undef CLASSMETH
+#undef METH0
+#undef METH1
+#undef METH2
 
     return;
 }
