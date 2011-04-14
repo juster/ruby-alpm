@@ -16,5 +16,6 @@ extern ID * loglevel_symbols, * transflag_symbols, * transconv_symbols,
 
 void define_enum_symbols ();
 int bitflag_to_tblindex ( int bitflag );
+int ralpm_symbol_to_enum ( VALUE symbol );
 
 #endif

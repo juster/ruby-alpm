@@ -14,6 +14,9 @@ class AlpmDBTest < Test::Unit::TestCase
       assert !localdb.respond_to?( m ), 'local dbs do not have #{m} method'
     end
 
+    assert localdb.respond_to?( 'set_pkg_reason' ),
+      'local db does have the set_pkg_reason method'
+
     assert localdb.pkgs.length > 0, 'local database pkgcache seems to work'
   end
 end

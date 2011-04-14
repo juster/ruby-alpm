@@ -5,15 +5,23 @@
 #include "ruby-alpm.h"
 #include "enum-symbols.h"
 
-#define ACC( FUNC, MAPPER ) ACCESSOR( db, pmdb_t, FUNC, MAPPER )
-#define STRACC( FUNC ) ACC( FUNC, rb_str_new2 )
-
-STRACC( get_name )
-STRACC( get_url )
-
 #define INITDBPTR \
     pmdb_t *db;   \
     Data_Get_Struct( self, pmdb_t, db )
+
+VALUE
+db_name ( VALUE self )
+{
+    INITDBPTR;
+    return rb_str_new2( alpm_db_get_name( db ));
+}
+
+VALUE
+db_url ( VALUE self )
+{
+    INITDBPTR;
+    return rb_str_new2( alpm_db_get_url( db ));
+}
 
 VALUE
 db_add_url ( VALUE self, VALUE url )
@@ -79,6 +87,26 @@ db_groups ( VALUE self )
     return grphash;
 }
 
+VALUE
+db_search ( VALUE self, VALUE wordsary )
+{
+    alpm_list_t * found, * wordslist;
+    INITDBPTR;
+
+    wordslist = ary_to_alpmstrlist( wordsary );
+    found     = alpm_db_search( db, wordslist );
+    alpm_list_free( wordslist );
+    return alpmpkglist_to_ary( found );
+}
+
+VALUE
+db_set_pkg_reason ( VALUE self, VALUE pkgname, VALUE reasonsym )
+{
+    INITDBPTR;
+    NEGISERR( alpm_db_set_pkgreason( db, StringValueCStr( pkgname ),
+                                     ralpm_symbol_to_enum( reasonsym )));
+}
+
 void Init_database ( void )
 {
     cDatabase = rb_define_class_under( mAlpm,     "DB",    rb_cObject );
@@ -91,12 +119,13 @@ void Init_database ( void )
     /* Methods for both local and sync databases. */
     
 #define METH( METH, C ) CLASSMETH( cDatabase, METH, C )
-#define METH0( METH ) METH( METH, 0 )
-#define METH1( METH ) METH( METH, 1 )
-#define METH2( METH ) METH( METH, 2 )
-    METH0( name );
-    METH1( find );
-    METH0( pkgs );
+#define METH0( NAME ) METH( NAME, 0 )
+#define METH1( NAME ) METH( NAME, 1 )
+#define METH2( NAME ) METH( NAME, 2 )
+    METH0( name       );
+    METH1( find       );
+    METH1( search     );
+    METH0( pkgs       );
     METH1( find_group );
     METH0( groups     );
     METH0( unregister );
@@ -104,7 +133,8 @@ void Init_database ( void )
 
     /* Local database methods. */
 
-#define METH( METH, C ) CLASSMETH( cLocalDB, METH, C )
+#define METH( NAME, C ) CLASSMETH( cLocalDB, NAME, C )
+    METH2( set_pkg_reason );
 #undef METH
 
     /* Sync database methods. */
