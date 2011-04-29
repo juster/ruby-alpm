@@ -18,7 +18,7 @@ void Init_dep ()
 {
     cDep = rb_define_class_under( mAlpm, "Dep", rb_cObject );
     
-#define METH( NAME, FUNC ) rb_define_method( cDep, NAME, dep_ ## FUNC, 1 )
+#define METH( NAME, FUNC ) rb_define_method( cDep, NAME, dep_ ## FUNC, 0 )
     METH( "mod", get_mod );
     METH( "name", get_name );
     METH( "version", get_version );
